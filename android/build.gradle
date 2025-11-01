@@ -6,6 +6,8 @@ buildscript {
   repositories {
     google()
     mavenCentral()
+    maven { url "https://jfrog.anythinktech.com/artifactory/overseas_sdk" }
+    maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
   }
 
   dependencies {
@@ -67,6 +69,9 @@ android {
 repositories {
   mavenCentral()
   google()
+  flatDir { dirs "$projectDir/libs" }
+  maven { url "https://jfrog.anythinktech.com/artifactory/overseas_sdk" }
+  maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -74,4 +79,45 @@ def kotlin_version = getExtOrDefault("kotlinVersion")
 dependencies {
   implementation "com.facebook.react:react-android"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  //Anythink (Necessary)
+  implementation "com.anythink.sdk:core-tpn:6.5.10"
+  implementation "com.anythink.sdk:nativead-tpn:6.5.10"
+  implementation "com.anythink.sdk:banner-tpn:6.5.10"
+  implementation "com.anythink.sdk:interstitial-tpn:6.5.10"
+  implementation "com.anythink.sdk:rewardedvideo-tpn:6.5.10"
+  implementation "com.anythink.sdk:splash-tpn:6.5.10"
+
+  //Androidx (Necessary)
+  implementation "androidx.appcompat:appcompat:1.6.1"
+  implementation "androidx.browser:browser:1.4.0"
+
+  //UnityAds
+  implementation "com.anythink.sdk:adapter-tpn-unityads:6.5.10"
+  implementation "com.unity3d.ads:unity-ads:4.14.0"
+
+  //Amazon
+  implementation "com.anythink.sdk:adapter-tpn-amazon:6.5.10"
+  implementation "com.amazon.android:aps-sdk:11.0.1"
+  implementation "com.iabtcf:iabtcf-decoder:2.0.10"
+
+  //Facebook
+  implementation "com.anythink.sdk:adapter-tpn-facebook:6.5.10"
+  implementation "com.facebook.android:audience-network-sdk:6.20.0"
+  implementation "androidx.annotation:annotation:1.0.0"
+
+  //Admob
+  implementation "com.anythink.sdk:adapter-tpn-admob:6.5.10"
+  implementation "com.google.android.gms:play-services-ads:24.4.0"
+
+  //AppLovin
+  implementation "com.anythink.sdk:adapter-tpn-applovin:6.5.10"
+  implementation "com.applovin:applovin-sdk:13.3.1"
+
+  //Mintegral
+  implementation "com.anythink.sdk:adapter-tpn-mintegral:6.5.10"
+  implementation "com.mbridge.msdk.oversea:mbridge_android_sdk:16.9.71"
+  implementation "androidx.recyclerview:recyclerview:1.1.0"
+
+  //Tramini
+  implementation "com.anythink.sdk:tramini-plugin-tpn:6.5.10"
 }

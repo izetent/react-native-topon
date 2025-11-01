@@ -32,7 +32,7 @@
     "!**/.*"
   ],
   "scripts": {
-    "example": "yarn workspace react-native-topon-example",
+    "example": "yarn workspace react-native-topon-example start",
     "test": "jest",
     "typecheck": "tsc",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
@@ -47,14 +47,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mahuoooo/react-native-topon.git"
+    "url": "git+https://github.com/izetent/react-native-topon.git"
   },
-  "author": "izetent <izetent@gmail.com> (https://github.com/Mahuoooo)",
+  "author": "izetent <izetent@gmail.com> (https://github.com/izetent)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Mahuoooo/react-native-topon/issues"
+    "url": "https://github.com/izetent/react-native-topon/issues"
   },
-  "homepage": "https://github.com/Mahuoooo/react-native-topon#readme",
+  "homepage": "https://github.com/izetent/react-native-topon#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },

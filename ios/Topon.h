@@ -1,5 +1,6 @@
+#import <React/RCTEventEmitter.h>
 #import <ToponSpec/ToponSpec.h>
 
-@interface Topon : NSObject <NativeToponSpec>
+@interface Topon : RCTEventEmitter <NativeToponSpec>
 
 @end
