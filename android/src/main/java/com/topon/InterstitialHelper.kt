@@ -125,8 +125,17 @@ class InterstitialHelper(module: ToponModule) : BaseHelper(module) {
     runOnUiThread {
       val ad = interstitialAd
       if (ad != null) {
-        isReady = false
-        ad.show(currentActivity(), scenario)
+        val activity = currentActivity()
+        if (activity != null) {
+          isReady = false
+          ad.show(activity, scenario)
+        } else {
+          MsgTools.printMsg("showInterstitial error, current activity is null $placementId")
+          val map = Arguments.createMap()
+          map.putString(Const.CallbackKey.PlacementId, placementId)
+          map.putString(Const.CallbackKey.ErrorMsg, "current activity is null")
+          sendEvent(Const.InterstitialCallback.PlayFailCallbackKey, map)
+        }
       } else {
         MsgTools.printMsg("showInterstitial error, you must call loadInterstitial first $placementId")
         val map = Arguments.createMap()

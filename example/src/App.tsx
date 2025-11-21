@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import {
+  Button,
   NativeEventEmitter,
   ScrollView,
   StyleSheet,
@@ -14,18 +15,44 @@ import Topon, {
   type RewardedEventName,
   type InterstitialEventName,
   type BannerEventName,
+  Interstitial,
 } from 'react-native-topon';
 
 const eventEmitter = new NativeEventEmitter(Topon.NativeModule);
+const APP_ID = 'YOUR_APP_ID';
+const APP_KEY = 'YOUR_APP_KEY';
+const rewardPlacementId = 'YOUR_REWARDED_PLACEMENT_ID';
 
 type LogEntry = { type: string; payload: unknown };
 
 export default function App() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [isLoadingRewarded, setIsLoadingRewarded] = useState(false);
+
+  const handleShowRewarded = async () => {
+    setIsLoadingRewarded(true);
+    try {
+      const isReady = await RewardedVideo.hasAdReady(rewardPlacementId);
+      if (isReady) {
+        RewardedVideo.showAd(rewardPlacementId);
+      } else {
+        setLogs((prev) => [
+          {
+            type: 'Rewarded/Info',
+            payload: 'Ad not ready yet, requesting load...',
+          },
+          ...prev,
+        ]);
+        RewardedVideo.loadAd(rewardPlacementId);
+      }
+    } finally {
+      setIsLoadingRewarded(false);
+    }
+  };
 
   useEffect(() => {
     SDK.setLogDebug(true);
-    SDK.init('YOUR_APP_ID', 'YOUR_APP_KEY');
+    SDK.init(APP_ID, APP_KEY);
 
     const rewardListeners = Object.values(ToponEvents.RewardedVideo).map(
       (event) =>
@@ -50,15 +77,12 @@ export default function App() {
       })
     );
 
-    RewardedVideo.loadAd('your-reward-placement-id', {
-      userID: 'demo-user',
-      media_ext: 'demo',
-    });
+    RewardedVideo.loadAd(rewardPlacementId);
 
     // 如需插屏广告，请将此处替换为真实的插屏位 ID 再启用
-    // Interstitial.loadAd('your-interstitial-placement-id');
+    Interstitial.loadAd('your-interstitial-placement-id');
 
-    Banner.loadAd('your-banner-placement-id', {
+    Banner.loadAd('YOUR_BANNER_PLACEMENT_ID', {
       width: 320,
       height: 50,
       adaptive_type: 0,
@@ -76,6 +100,13 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>TopOn Demo</Text>
+      <View style={styles.buttonRow}>
+        <Button
+          title={isLoadingRewarded ? 'Checking…' : '显示激励广告'}
+          onPress={handleShowRewarded}
+          disabled={isLoadingRewarded}
+        />
+      </View>
       <ScrollView style={styles.logContainer}>
         {logs.map((item, index) => (
           <View key={index} style={styles.logRow}>
@@ -112,6 +143,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 8,
+  },
+  buttonRow: {
+    marginBottom: 12,
   },
   logRow: {
     marginBottom: 12,

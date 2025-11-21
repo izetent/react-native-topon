@@ -23,6 +23,11 @@ yarn react-native codegen
 
 ## 快速开始
 
+TopOn 模块分为两个层面：
+
+- **SDK**：负责初始化、GDPR、日志开关等全局配置。
+- **RewardedVideo / Interstitial / Banner**：提供各广告位的加载、展示、状态查询方法。
+
 ```ts
 import Topon, {
   SDK,
@@ -56,7 +61,44 @@ console.log('Rewarded status', status?.isReady);
 subscription.remove();
 ```
 
-详细 API 请查看 `src/index.tsx` 中的导出定义。
+详细 API 请查看 `src/index.tsx` 中的导出定义，或参考下方表格。
+
+## API 总览
+
+### SDK
+
+| 方法 | 说明 |
+| --- | --- |
+| `init(appId, appKey)` | 初始化 SDK，**必须**在所有广告调用前执行一次 |
+| `setLogDebug(isDebug)` | 打开/关闭原生日志输出，便于调试 |
+| `getSDKVersionName()` | 返回当前 TopOn SDK 版本号 |
+| `isCnSDK()` | 判断是否为国内 SDK |
+| `setExcludeMyOfferPkgList(packages)` | 排除 MyOffer 包名黑名单 |
+| `initCustomMap(customMap)` / `setPlacementCustomMap(placementId, map)` | 设置全局或广告位级别的扩展参数 |
+| `setGDPRLevel(level)` / `getGDPRLevel()` / `getUserLocation()` / `showGDPRAuth()` | GDPR 相关 API |
+| `deniedUploadDeviceInfo(keys)` | 拒绝上传指定设备信息字段 |
+
+### RewardedVideo / Interstitial
+
+| 方法 | 说明 |
+| --- | --- |
+| `loadAd(placementId, settings?)` | 加载广告，`settings` 可包含 `userID`、`media_ext`、`custom_rule` 等 TopOn 字段 |
+| `showAd(placementId)` / `showAdInScenario(placementId, scenario)` | 展示广告，可按需指定 `scenario` |
+| `hasAdReady(placementId)` | 返回该广告位当前是否可播放 |
+| `checkAdStatus(placementId)` | 返回 `ToponAdStatus`（`isLoading`、`isReady`、`adInfo`），便于诊断 |
+
+> 建议在收到 `Loaded` 事件后再调用 `hasAdReady` 或 `checkAdStatus`，避免频繁轮询。
+
+### Banner
+
+| 方法 | 说明 |
+| --- | --- |
+| `loadAd(placementId, settings?)` | 加载 Banner；`settings` 支持 `width`、`height`、`adaptive_type` 等键 |
+| `showAdInRectangle(placementId, rect)` | 以 `{ x, y, width, height }` 指定展示区域 |
+| `showAdInPosition(placementId, position)` | `position` 取值 `top`/`bottom` |
+| `showAdInRectangleAndScenario` / `showAdInPositionAndScenario` | 在指定场景中展示 |
+| `hideAd` / `reShowAd` / `removeAd` | 控制 Banner 显示、隐藏与彻底移除 |
+| `hasAdReady` / `checkAdStatus` | 查询加载状态信息 |
 
 ## 事件监听
 

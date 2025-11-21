@@ -126,8 +126,17 @@ class RewardedVideoHelper(module: ToponModule) : BaseHelper(module) {
     runOnUiThread {
       val ad = rewardVideoAd
       if (ad != null) {
-        isReady = false
-        ad.show(currentActivity(), scenario)
+        val activity = currentActivity()
+        if (activity != null) {
+          isReady = false
+          ad.show(activity, scenario)
+        } else {
+          MsgTools.printMsg("showRewardedVideo error, current activity is null $placementId")
+          val map = Arguments.createMap()
+          map.putString(Const.CallbackKey.PlacementId, placementId)
+          map.putString(Const.CallbackKey.ErrorMsg, "current activity is null")
+          sendEvent(Const.RewardVideoCallback.PlayFailCallbackKey, map)
+        }
       } else {
         MsgTools.printMsg("showVideo error, you must call loadRewardVideo first $placementId")
         val map = Arguments.createMap()
