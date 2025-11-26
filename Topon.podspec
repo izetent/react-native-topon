@@ -16,6 +16,14 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,cpp}"
   s.private_header_files = "ios/**/*.h"
 
+  s.dependency "TPNiOS", "6.4.93"
+  s.dependency "TPNUnityAdsSDKAdapter", "6.4.93"
+  s.dependency "TPNFacebookSDKAdapter", "6.4.93.1"
+  s.dependency "TPNAdmobSDKAdapter", "6.4.93.1"
+  s.dependency "TPNApplovinSDKAdapter", "6.4.93.1"
+  s.dependency "TPNMintegralSDKAdapter", "6.4.93"
+  s.dependency "TPNYandexSDKAdapter", "6.4.93"
+
 
   install_modules_dependencies(s)
 end

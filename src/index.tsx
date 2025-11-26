@@ -18,6 +18,7 @@ export interface BannerRectangle {
   y?: number;
   width?: number;
   height?: number;
+  usesPixel?: boolean;
   [key: string]: JsonSerializable;
 }
 
@@ -36,6 +37,7 @@ export interface BannerSettings extends BannerRectangle {
   adaptive_type?: number;
   adaptive_orientation?: number;
   adaptive_width?: number;
+  banner_ad_size_struct?: BannerRectangle;
   [key: string]: JsonSerializable;
 }
 
@@ -62,6 +64,129 @@ export type ToponRewardedEventPayload =
 
 export type ToponInterstitialEventPayload = ToponRewardedEventPayload;
 export type ToponBannerEventPayload = ToponRewardedEventPayload;
+
+const BANNER_AD_SIZE_STRUCT_KEY = 'banner_ad_size_struct' as const;
+
+export const PERSONALIZED = 0 as const;
+export const NONPERSONALIZED = 1 as const;
+export const UNKNOWN = 2 as const;
+export const kATUserLocationInEU = 1 as const;
+
+export const OS_VERSION_NAME = 'os_vn' as const;
+export const OS_VERSION_CODE = 'os_vc' as const;
+export const APP_PACKAGE_NAME = 'package_name' as const;
+export const APP_VERSION_NAME = 'app_vn' as const;
+export const APP_VERSION_CODE = 'app_vc' as const;
+export const BRAND = 'brand' as const;
+export const MODEL = 'model' as const;
+export const DEVICE_SCREEN_SIZE = 'screen' as const;
+export const MNC = 'mnc' as const;
+export const MCC = 'mcc' as const;
+export const LANGUAGE = 'language' as const;
+export const TIMEZONE = 'timezone' as const;
+export const USER_AGENT = 'ua' as const;
+export const ORIENTATION = 'orient' as const;
+export const NETWORK_TYPE = 'network_type' as const;
+
+export const INSTALLER = 'it_src' as const;
+export const ANDROID_ID = 'android_id' as const;
+export const GAID = 'gaid' as const;
+export const MAC = 'mac' as const;
+export const IMEI = 'imei' as const;
+export const OAID = 'oaid' as const;
+
+export const IDFA = 'idfa' as const;
+export const IDFV = 'idfv' as const;
+
+export const UseRewardedVideoAsInterstitial =
+  'UseRewardedVideoAsInterstitial' as const;
+
+export const kATBannerAdLoadingExtraBannerAdSizeStruct =
+  BANNER_AD_SIZE_STRUCT_KEY;
+export const kATBannerAdAdaptiveType = 'adaptive_type' as const;
+export const kATBannerAdAdaptiveTypeAnchored = 0 as const;
+export const kATBannerAdAdaptiveTypeInline = 1 as const;
+export const kATBannerAdAdaptiveWidth = 'adaptive_width' as const;
+export const kATBannerAdAdaptiveOrientation = 'adaptive_orientation' as const;
+export const kATBannerAdAdaptiveOrientationCurrent = 0 as const;
+export const kATBannerAdAdaptiveOrientationPortrait = 1 as const;
+export const kATBannerAdAdaptiveOrientationLandscape = 2 as const;
+export const kATBannerAdShowingPositionTop: BannerPosition = 'top';
+export const kATBannerAdShowingPositionBottom: BannerPosition = 'bottom';
+
+const normalizeBannerSettings = (
+  settings?: BannerSettings | null
+): BannerSettings | undefined => {
+  if (!settings) {
+    return undefined;
+  }
+
+  const normalized: BannerSettings = { ...settings };
+  const sizeStruct = settings[BANNER_AD_SIZE_STRUCT_KEY];
+  if (
+    sizeStruct &&
+    typeof sizeStruct === 'object' &&
+    ('width' in sizeStruct ||
+      'height' in sizeStruct ||
+      'usesPixel' in sizeStruct)
+  ) {
+    if (typeof sizeStruct.width === 'number') {
+      normalized.width = sizeStruct.width;
+    }
+    if (typeof sizeStruct.height === 'number') {
+      normalized.height = sizeStruct.height;
+    }
+    if (typeof sizeStruct.usesPixel === 'boolean') {
+      normalized.usesPixel = sizeStruct.usesPixel;
+    }
+    delete (normalized as Record<string, unknown>)[BANNER_AD_SIZE_STRUCT_KEY];
+  }
+  return normalized;
+};
+
+export const createLoadAdSize = (
+  width: number,
+  height: number
+): BannerRectangle => ({
+  width,
+  height,
+});
+
+export const createLoadPixelAdSize = (
+  width: number,
+  height: number,
+  usesPixel = true
+): BannerRectangle => ({
+  width,
+  height,
+  usesPixel,
+});
+
+export const createShowAdRect = (
+  x: number,
+  y: number,
+  width: number,
+  height: number
+): BannerRectangle => ({
+  x,
+  y,
+  width,
+  height,
+});
+
+export const createShowPixelAdRect = (
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  usesPixel = true
+): BannerRectangle => ({
+  x,
+  y,
+  width,
+  height,
+  usesPixel,
+});
 
 const ensureJsonString = (input: JsonSerializable): string => {
   if (typeof input === 'string') {
@@ -152,7 +277,10 @@ export const Interstitial = {
 
 export const Banner = {
   loadAd: (placementId: PlacementId, settings?: BannerSettings) =>
-    NativeTopon.bannerLoadAd(placementId, ensureJsonString(settings ?? {})),
+    NativeTopon.bannerLoadAd(
+      placementId,
+      ensureJsonString(normalizeBannerSettings(settings) ?? {})
+    ),
   showAdInRectangle: (placementId: PlacementId, rect: BannerRectangle) =>
     NativeTopon.bannerShowAdInRectangle(placementId, ensureJsonString(rect)),
   showAdInPosition: (placementId: PlacementId, position: BannerPosition) =>

@@ -236,9 +236,14 @@ dependencies {
 
 TopOn 要求保留大量类与字段，请在宿主 App 的 `proguard-rules.pro` 中加入官方提供的 keep 配置，并在 `AndroidManifest.xml` 中声明网络、设备信息等必要权限，同样参考 TopOn 文档补全。
 
-## iOS 状态
+## iOS 集成说明
 
-当前仓库已优先完成 Android 新架构支持，iOS 部分仍在迁移中，请暂时忽略代码中的旧示例实现。
+1. 进入示例或宿主 App 的 `ios` 目录执行 `RCT_NEW_ARCH_ENABLED=1 pod install`（或直接 `pod install`），`Topon.podspec` 会自动拉取 `AnyThinkSDK`、`AnyThinkRewardedVideo`、`AnyThinkInterstitial`、`AnyThinkBanner` 等依赖，无需手动添加。
+2. 在 JS 侧调用 `SDK.init(appId, appKey)` 与 Android 保持一致，其他 API 亦共享同一套定义。
+3. 确保 `Info.plist` 中包含 `NSUserTrackingUsageDescription`（请求 IDFA 必须）以及宿主业务所需的权限、`SKAdNetworkItems` 等配置，具体以 [TopOn iOS 接入文档](https://help.toponad.net/cn/access?slug=iOS) 为准。
+4. 若工程启用 `use_frameworks!`，请保持与 React Native 新架构兼容的配置（`use_frameworks! :linkage => :static`），避免 Pod 链接方式冲突。
+
+iOS 与 Android 在事件名、回调入参上保持一致，所有广告能力均通过同一个 TurboModule 导出，示例应用可直接在 iOS 端运行验证。
 
 ## 开发与贡献
 

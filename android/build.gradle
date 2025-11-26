@@ -118,6 +118,10 @@ dependencies {
   implementation "com.mbridge.msdk.oversea:mbridge_android_sdk:16.9.71"
   implementation "androidx.recyclerview:recyclerview:1.1.0"
 
+  //Yandex
+  implementation "com.anythink.sdk:adapter-tpn-yandex:6.5.10"
+  implementation "com.yandex.android:mobileads:7.12.2"
+  
   //Tramini
   implementation "com.anythink.sdk:tramini-plugin-tpn:6.5.10"
 }
