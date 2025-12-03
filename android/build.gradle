@@ -8,6 +8,8 @@ buildscript {
     mavenCentral()
     maven { url "https://jfrog.anythinktech.com/artifactory/overseas_sdk" }
     maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
+    maven { url 'https://artifact.bytedance.com/repository/pangle' }
+    maven { url "https://bitbucket.org/sdkcenter/sdkcenter/raw/release" }
   }
 
   dependencies {
@@ -72,6 +74,8 @@ repositories {
   flatDir { dirs "$projectDir/libs" }
   maven { url "https://jfrog.anythinktech.com/artifactory/overseas_sdk" }
   maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
+  maven { url 'https://artifact.bytedance.com/repository/pangle' }
+  maven { url "https://bitbucket.org/sdkcenter/sdkcenter/raw/release" }
 }
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
@@ -91,14 +95,44 @@ dependencies {
   implementation "androidx.appcompat:appcompat:1.6.1"
   implementation "androidx.browser:browser:1.4.0"
 
+  //Vungle
+  implementation "com.anythink.sdk:adapter-tpn-vungle:6.5.10"
+  implementation "com.vungle:vungle-ads:7.5.0"
+  implementation "com.google.android.gms:play-services-basement:18.1.0"
+  implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
+
   //UnityAds
   implementation "com.anythink.sdk:adapter-tpn-unityads:6.5.10"
   implementation "com.unity3d.ads:unity-ads:4.14.0"
+
+
+  //Bigo
+  implementation "com.anythink.sdk:adapter-tpn-bigo:6.5.10"
+  implementation "com.bigossp:bigo-ads:5.3.0"
+
+  //Taurusx
+  implementation "com.anythink.sdk:adapter-tpn-taurusx:6.5.10.2"
+  implementation "com.taurusx.tax:ads:1.10.1"
+
+  //Pangle
+  implementation "com.anythink.sdk:adapter-tpn-pangle:6.5.10.3"
+  implementation "com.pangle.global:pag-sdk:7.6.0.2"
+  implementation "com.google.android.gms:play-services-ads-identifier:18.2.0"
 
   //Amazon
   implementation "com.anythink.sdk:adapter-tpn-amazon:6.5.10"
   implementation "com.amazon.android:aps-sdk:11.0.1"
   implementation "com.iabtcf:iabtcf-decoder:2.0.10"
+  //Kwai
+  implementation "com.anythink.sdk:adapter-tpn-kwai:6.5.10.2"
+  implementation "io.github.kwainetwork:adApi:1.2.21"
+  implementation "io.github.kwainetwork:adImpl:1.2.21"
+  implementation "androidx.media3:media3-exoplayer:1.0.0-alpha01"
+  implementation "androidx.appcompat:appcompat:1.6.1"
+  implementation "com.google.android.material:material:1.2.1"
+  implementation "androidx.annotation:annotation:1.2.0"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10"
+  implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
 
   //Facebook
   implementation "com.anythink.sdk:adapter-tpn-facebook:6.5.10"
@@ -121,6 +155,11 @@ dependencies {
   //Yandex
   implementation "com.anythink.sdk:adapter-tpn-yandex:6.5.10"
   implementation "com.yandex.android:mobileads:7.12.2"
+
+  //Fyber
+  implementation "com.anythink.sdk:adapter-tpn-fyber:6.5.10"
+  implementation "com.fyber:marketplace-sdk:8.3.7"
+  implementation "com.google.android.gms:play-services-ads-identifier:18.0.1"
   
   //Tramini
   implementation "com.anythink.sdk:tramini-plugin-tpn:6.5.10"
